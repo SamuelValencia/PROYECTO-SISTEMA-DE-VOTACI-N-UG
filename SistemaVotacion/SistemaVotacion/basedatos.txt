@@ -1,0 +1,124 @@
+
+DROP DATABASE IF EXISTS BDVotacion;
+CREATE DATABASE BDVotacion;
+USE BDVotacion;
+
+CREATE TABLE usuario(
+    idUsuario INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    apellidos VARCHAR(70) NOT NULL,
+    correo VARCHAR(100) NOT NULL UNIQUE,
+    contrasenia VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE semestre(
+    idSemestre INT PRIMARY KEY AUTO_INCREMENT,
+    nomSemestre VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE estudiante(
+    idEstudiante  INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    cedula VARCHAR(12) NOT NULL UNIQUE,
+    apellidos VARCHAR(70) NOT NULL,
+    correo VARCHAR(100) NOT NULL UNIQUE,
+    celular VARCHAR(12)   NULL,
+    idSemestre INT NOT NULL,
+    contrasenia VARCHAR(20) NOT NULL,
+    FOREIGN KEY(idSemestre) REFERENCES semestre(idSemestre) 
+);
+
+CREATE TABLE carrera(
+    idCarrera INT PRIMARY KEY AUTO_INCREMENT,
+    nomCarrera VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE lista(
+    idLista INT PRIMARY KEY AUTO_INCREMENT,
+    nomLista VARCHAR(50) NOT NULL,
+    nomPresidente VARCHAR(50) NOT NULL,
+    nomSecretario VARCHAR(50) NOT NULL,
+    nomPrimerVocal VARCHAR(50) NOT NULL,
+    idCarrera INT NOT NULL,
+    fotoP TEXT NOT NULL,
+    descripcion TEXT  NULL,
+    cantVotos INT NOT NULL,
+    FOREIGN KEY(idCarrera) REFERENCES carrera(idCarrera) 
+);
+
+CREATE TABLE votacion_estudiante(
+	idVotacion INT PRIMARY KEY AUTO_INCREMENT,
+    idLista INT NOT NULL,
+    idEstudiante INT NOT NULL,
+    FOREIGN KEY(idLista) REFERENCES lista(idLista) ON DELETE CASCADE,
+    FOREIGN KEY(idEstudiante) REFERENCES estudiante(idEstudiante) ON DELETE CASCADE
+);
+
+CREATE TABLE propuestas(
+    idPropuesta INT PRIMARY KEY AUTO_INCREMENT,
+    dscripcion TEXT NOT NULL,
+    idLista INT NOT NULL,
+    FOREIGN KEY(idLista) REFERENCES lista(idLista) ON DELETE CASCADE
+);
+
+CREATE TABLE candidata(
+     idCandidata INT PRIMARY KEY AUTO_INCREMENT,
+     nombre VARCHAR(50) NOT NULL,
+     apellidos VARCHAR(70) NOT NULL,
+     fechaNac DATE NOT NULL,
+     formacion_academica VARCHAR(100) NOT NULL,
+     pasatiempos TEXT  NULL,
+     habilidades TEXT NOT NULL,
+     intereres TEXT NOT NULL,
+     aspiraciones_futuro TEXT NOT NULL,
+     altura DECIMAL(8,2) NOT NULL,
+     peso DECIMAL(8,2) NOT NULL,
+     color_ojos VARCHAR(30) NOT NULL,
+     color_cabello VARCHAR(40) NOT NULL,
+     medida_cintura DECIMAL(8,2) NOT NULL,
+     medida_busto DECIMAL(8,2) NOT NULL,
+     medida_cadera DECIMAL(8,2) NOT NULL,
+     puntuacionReina INT NOT NULL,
+     puntuacionMissFotogenica INT NOT NULL
+);
+
+CREATE TABLE galeria(
+    idGaleria INT PRIMARY KEY AUTO_INCREMENT,
+    idCandidata INT NOT NULL,
+    foto TEXT NOT NULL,
+    titulo VARCHAR(40) NOT NULL,
+    descripcion TEXT NOT NULL,
+    estado BIT NOT NULL,
+    FOREIGN KEY(idCandidata) REFERENCES candidata(idCandidata)
+);
+
+CREATE TABLE votacion(
+    idVotacion INT PRIMARY KEY AUTO_INCREMENT,
+    idCandidata INT NOT NULL,
+    idEstudiante INT NOT NULL,
+    tipo INT NOT NULL,
+    FOREIGN KEY(idCandidata) REFERENCES candidata(idCandidata),
+    FOREIGN KEY(idEstudiante) REFERENCES estudiante(idEstudiante)
+);
+
+INSERT INTO usuario (nombre, apellidos, correo, contrasenia) VALUES
+('Admin', 'Admin', 'admin@ug.edu.ec', '12345');
+
+INSERT INTO semestre (nomSemestre) VALUES ('Primer Semestre');
+INSERT INTO semestre (nomSemestre) VALUES ('Segundo Semestre');
+INSERT INTO semestre (nomSemestre) VALUES ('Tercer Semestre');
+INSERT INTO semestre (nomSemestre) VALUES ('Cuarto Semestre');
+INSERT INTO semestre (nomSemestre) VALUES ('Quinto Semestre');
+INSERT INTO semestre (nomSemestre) VALUES ('Sexto Semestre');
+INSERT INTO semestre (nomSemestre) VALUES ('Séptimo Semestre');
+INSERT INTO semestre (nomSemestre) VALUES ('Octavo Semestre');
+INSERT INTO semestre (nomSemestre) VALUES ('Noveno Semestre');
+INSERT INTO semestre (nomSemestre) VALUES ('Décimo Semestre');
+
+INSERT INTO carrera (nomCarrera) VALUES ('Ingeniería en Sistemas Computacionales');
+INSERT INTO carrera (nomCarrera) VALUES ('Administración de Empresas');
+INSERT INTO carrera (nomCarrera) VALUES ('Contaduría Pública');
+INSERT INTO carrera (nomCarrera) VALUES ('Ingeniería Industrial');
+INSERT INTO carrera (nomCarrera) VALUES ('Derecho');
+INSERT INTO carrera (nomCarrera) VALUES ('Arquitectura');
+INSERT INTO carrera (nomCarrera) VALUES ('Medicina');
